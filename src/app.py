@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 from fit_tool.fit_file import FitFile
@@ -7,7 +8,17 @@ from fit_tool.profile.messages.file_id_message import FileIdMessage
 def main():
     """ Analyze a FIT file """
     print(f'Loading activity file...')
-    app_fit = FitFile.from_file('./activity/indoor.fit')
+    
+    # Get the current directory of the 'src' folder
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    
+    # Navigate to the 'activity' folder from the 'src' folder
+    activity_directory = os.path.join(current_directory, '..', 'activity')
+    
+    # Specify the file path relative to the current directory
+    file_path = os.path.join(activity_directory, 'indoor.fit')
+    
+    app_fit = FitFile.from_file(file_path)
     timestamp = []
     power = []
     distance = []
