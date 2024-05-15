@@ -48,7 +48,9 @@ def main():
 
     plot_data(power, time, speed, cadence, elevation, heart_rate)
     print_statistics(speed, cadence, power, heart_rate)
-
+    
+    # Calculate the 30-second interval with the highest average power
+    calculate_highest_average_power_interval(power, time)
 
 def plot_data(power, time, speed, cadence, elevation, heart_rate):
     """ Plot power, speed, cadence, elevation, and heart rate """
@@ -89,6 +91,20 @@ def print_statistics(speed, cadence, power, heart_rate):
     print(f"Average Cadence: {avg_cadence:.2f} rpm")
     print(f"Average Power: {avg_power:.2f} W")
     print(f"Average Heart Rate: {avg_heart_rate:.2f} bpm")
+
+def calculate_highest_average_power_interval(power, time):
+    """ Calculate the 30-second interval with the highest average power """
+    # Assuming each interval is 30 seconds
+    interval_length = 300
+    num_intervals = len(power) // interval_length
+
+    # Calculate the average power for each interval
+    averages = [np.mean(power[i*interval_length:(i+1)*interval_length]) for i in range(num_intervals)]
+
+    # Find the maximum average power value
+    max_average_power = max(averages)
+
+    print(f"The highest average power in any {interval_length}-second interval is:", max_average_power)
 
 if __name__ == "__main__":
     main()
