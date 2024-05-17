@@ -13,7 +13,7 @@ class TrainingZones:
             "Zone 2": (101, 200),
             "Zone 3": (201, 300),
             "Zone 4": (301, 400),
-            "Zone 5": (401,5000)
+            "Zone 5": (401, 5000)
         }
 
     def time_in_zones(self, power, time):
@@ -21,6 +21,29 @@ class TrainingZones:
         for zone, (lower, upper) in self.zones.items():
             zone_times[zone] = np.sum((power >= lower) & (power < upper)) * 1.0 / len(time)
         return zone_times
+
+class Person:
+    def __init__(self, height, weight, ftp):
+        self.height = height
+        self.weight = weight
+        self.ftp = ftp
+        self.zones = TrainingZones()
+        self.fatigue = 0.0
+        self.tss = 0.0
+        self.form = 0.0
+        self.ctl = 0.0  # Chronic Training Load
+        self.atl = 0.0  # Acute Training Load
+
+    def update_training_metrics(self, normalized_power, duration):
+        # Calculate Intensity Factor
+        intensity_factor = calculate_intensity_factor(normalized_power, self.ftp)
+        # Calculate Training Stress Score
+        tss = calculate_tss(duration, normalized_power, intensity_factor, self.ftp)
+        self.tss = tss
+        # Update CTL, ATL, and form
+        self.ctl = calculate_ctl(self.ctl, tss)
+        self.atl = calculate_atl(self.atl, tss)
+        self.form = calculate_tsb(self.ctl, self.atl)
 
 def main():
     """ Analyze a FIT file """
@@ -91,6 +114,18 @@ def main():
     normalized_power = calculate_normalized_power(power, time)
     print(f"Normalized Power: {normalized_power:.2f} W")
 
+    # Define a person
+    cyclist = Person(height=1.75, weight=70, ftp=250)  # Example values for height (meters), weight (kg), and FTP (watts)
+
+    # Update cyclist's training metrics
+    cyclist.update_training_metrics(normalized_power, len(time))
+
+    # Print the person's metrics
+    print(f"Person's TSS: {cyclist.tss:.2f}")
+    print(f"Person's CTL: {cyclist.ctl:.2f}")
+    print(f"Person's ATL: {cyclist.atl:.2f}")
+    print(f"Person's Form: {cyclist.form:.2f}")
+
 def plot_data(power, time, speed, cadence, elevation, heart_rate):
     """ Plot power, speed, cadence, elevation, and heart rate """
     fig, axs = plt.subplots(5, 1, sharex=True, figsize=(8, 12))
@@ -143,7 +178,7 @@ def calculate_highest_average_power_interval(power, time):
     # Find the maximum average power value
     max_average_power = max(averages)
 
-    print(f"The highest average power in any {interval_length}-second interval is:", max_average_power)
+    print(f"The highest average power in any {interval_length}-second interval is: {max_average_power:.2f}.")
 
 def calculate_normalized_power(power, time):
     """
@@ -206,11 +241,77 @@ def print_max_values(power, speed, heart_rate, elevation):
     max_heart_rate = np.max(heart_rate)
     max_elevation = np.max(elevation)
 
-    print(f"Max Power: {max_power} W")
-    print(f"Max Speed: {max_speed} km/h")
-    print(f"Max Heart Rate: {max_heart_rate} bpm")
-    print(f"Max Elevation: {max_elevation} meters")
+    print(f"Max Power: {max_power:.2f} W")
+    print(f"Max Speed: {max_speed:.2f} km/h")
+    print(f"Max Heart Rate: {max_heart_rate:.1f} bpm")
+    print(f"Max Elevation: {max_elevation:.1f} meters")
 
+def calculate_intensity_factor(normalized_power, FTP):
+    """
+    Calculate the Intensity Factor (IF).
+
+    Parameters:
+        normalized_power (float): Normalized Power.
+        FTP (float): Functional Threshold Power.
+
+    Returns:
+        float: Intensity Factor.
+    """
+    return normalized_power / FTP
+
+def calculate_tss(seconds, normalized_power, intensity_factor, FTP):
+    """
+    Calculate the Training Stress Score (TSS).
+
+    Parameters:
+        seconds (int): Total duration of the workout in seconds.
+        normalized_power (float): Normalized Power.
+        intensity_factor (float): Intensity Factor.
+        FTP (float): Functional Threshold Power.
+
+    Returns:
+        float: Training Stress Score.
+    """
+    return (seconds * normalized_power * intensity_factor) / (FTP * 3600) * 100
+
+def calculate_ctl(ctl_yesterday, tss_today):
+    """
+    Calculate the Chronic Training Load (CTL).
+
+    Parameters:
+        ctl_yesterday (float): CTL value from yesterday.
+        tss_today (float): TSS value for today.
+
+    Returns:
+        float: CTL value for today.
+    """
+    return ctl_yesterday + (tss_today - ctl_yesterday) / 42
+
+def calculate_atl(atl_yesterday, tss_today):
+    """
+    Calculate the Acute Training Load (ATL).
+
+    Parameters:
+        atl_yesterday (float): ATL value from yesterday.
+        tss_today (float): TSS value for today.
+
+    Returns:
+        float: ATL value for today.
+    """
+    return atl_yesterday + (tss_today - atl_yesterday) / 7
+
+def calculate_tsb(ctl_today, atl_today):
+    """
+    Calculate the Training Stress Balance (TSB).
+
+    Parameters:
+        ctl_today (float): CTL value for today.
+        atl_today (float): ATL value for today.
+
+    Returns:
+        float: TSB value for today.
+    """
+    return ctl_today - atl_today
 
 if __name__ == "__main__":
     main()
