@@ -1,4 +1,5 @@
 import os
+import json
 import matplotlib.pyplot as plt
 import numpy as np
 from fit_tool.fit_file import FitFile
@@ -126,6 +127,9 @@ def main():
     print(f"Person's ATL: {cyclist.atl:.2f}")
     print(f"Person's Form: {cyclist.form:.2f}")
 
+    # Write data to JSON
+    write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, zone_times, normalized_power, cyclist, elevation_climbed, elevation_descended)
+
 def plot_data(power, time, speed, cadence, elevation, heart_rate):
     """ Plot power, speed, cadence, elevation, and heart rate """
     fig, axs = plt.subplots(5, 1, sharex=True, figsize=(8, 12))
@@ -200,8 +204,8 @@ def calculate_normalized_power(power, time):
     # Step 3: Determine the average of these values
     average_power_fourth = np.mean(rolling_average_power_fourth)
     
-    # Step 4: Find the fourth root of the resulting average
-    normalized_power = np.power(average_power_fourth, 1/4)
+    # Step 4: Finally, take the fourth root of that average
+    normalized_power = np.power(average_power_fourth, 0.25)
     
     return normalized_power
 
@@ -312,6 +316,31 @@ def calculate_tsb(ctl_today, atl_today):
         float: TSB value for today.
     """
     return ctl_today - atl_today
+
+def write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, zone_times, normalized_power, cyclist, elevation_climbed, elevation_descended):
+    """ Write the training data to a JSON file """
+    data = {
+        'timestamp': np.array(timestamp).tolist(),  # Convert to NumPy array before calling tolist
+        'power': power.tolist(),
+        'speed': speed.tolist(),
+        'cadence': cadence.tolist(),
+        'elevation': elevation.tolist(),
+        'heart_rate': heart_rate.tolist(),
+        'zone_times': zone_times,
+        'normalized_power': normalized_power,
+        'cyclist_metrics': {
+            'tss': cyclist.tss,
+            'ctl': cyclist.ctl,
+            'atl': cyclist.atl,
+            'form': cyclist.form
+        },
+        'elevation_climbed': elevation_climbed,
+        'elevation_descended': elevation_descended
+    }
+    
+    with open('training_data.json', 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+    print('Training data written to training_data.json')
 
 if __name__ == "__main__":
     main()
