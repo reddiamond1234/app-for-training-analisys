@@ -111,11 +111,7 @@ class PreLoginBloc extends Bloc<_PreLoginEvent, PreLoginState> {
 
       emit(state.copyWith(
         failure: initOrFailure.isError() ? initOrFailure.error : null,
-        routeToPush: initOrFailure.isError()
-            ? null
-            : isSuccess.$2
-                ? BVRoutes.welcome
-                : BVRoutes.home,
+        routeToPush: initOrFailure.isError() ? null : BVRoutes.home,
         isLoading: false,
       ));
     }

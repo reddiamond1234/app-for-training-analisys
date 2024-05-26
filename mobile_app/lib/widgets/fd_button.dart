@@ -69,7 +69,7 @@ class _FDButtonState extends State<FDButton> {
             ButtonStyle(
               splashFactory: InkSparkle.splashFactory,
               backgroundColor: MaterialStateProperty.all(
-                widget.enabled ? BVColors.red : BVColors.text.withOpacity(0.5),
+                widget.enabled ? BVColors.dark : BVColors.text.withOpacity(0.5),
               ),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
@@ -145,7 +145,6 @@ class FDPrimaryButton extends StatelessWidget {
     this.prefixIcon,
     this.prefixIconColor,
     this.borderRadius,
-    this.withInnerBorder = false,
     this.borderColor,
   }) : assert(text != null || child != null);
 
@@ -162,69 +161,31 @@ class FDPrimaryButton extends StatelessWidget {
   final Color? prefixIconColor;
   final double? borderRadius;
   final Color? borderColor;
-  final bool withInnerBorder;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(borderRadius ?? 50),
-        border: Border.all(
-          color: enabled
-              ? (borderColor ?? color ?? BVColors.gold)
-              : BVColors.text.withOpacity(0.65),
-          width: 1,
+    return FDButton(
+      enabled: enabled,
+      prefixIcon: prefixIcon,
+      prefixIconColor: prefixIconColor,
+      text: text,
+      expandWidth: expandWidth,
+      height: isBig ? 65 : null,
+      padding: padding ?? const EdgeInsets.symmetric(vertical: 18),
+      textStyle: BVTextStyles.name.copyWith(color: textColor ?? Colors.white),
+      buttonStyle: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          enabled ? (color ?? BVColors.dark) : BVColors.text.withOpacity(0.65),
+        ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            side: BorderSide.none,
+            borderRadius: BorderRadius.circular(borderRadius ?? 15),
+          ),
         ),
       ),
-      padding: const EdgeInsets.all(4),
-      child: Stack(
-        children: [
-          FDButton(
-            enabled: enabled,
-            prefixIcon: prefixIcon,
-            prefixIconColor: prefixIconColor,
-            text: text,
-            expandWidth: expandWidth,
-            height: isBig ? 65 : null,
-            padding: padding ?? const EdgeInsets.symmetric(vertical: 18),
-            textStyle:
-                BVTextStyles.name.copyWith(color: textColor ?? Colors.white),
-            buttonStyle: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                enabled
-                    ? (color ?? BVColors.dark)
-                    : BVColors.text.withOpacity(0.65),
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  side: BorderSide.none,
-                  borderRadius: BorderRadius.circular(borderRadius ?? 50),
-                ),
-              ),
-            ),
-            onPressed: () async => await onPressed?.call(),
-            child: child,
-          ),
-          if (withInnerBorder)
-            Positioned.fill(
-              child: IgnorePointer(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(borderRadius ?? 50),
-                      border: Border.all(
-                        color: borderColor ?? color ?? BVColors.gold,
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
+      onPressed: () async => await onPressed?.call(),
+      child: child,
     );
   }
 }

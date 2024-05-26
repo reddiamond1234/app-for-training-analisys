@@ -126,6 +126,18 @@ class FirebaseDatabaseService {
     }
   }
 
+  Future<Either<Failure, String>> addDocument(
+    String path,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      final DocumentReference ref = await _firestore.collection(path).add(data);
+      return value(ref.id);
+    } catch (_) {
+      return error(const BackendFailure());
+    }
+  }
+
   void printLongList(List list) {
     for (var i = 0; i < list.length; i++) {
       print('${list[i]}');
@@ -133,9 +145,8 @@ class FirebaseDatabaseService {
   }
 }
 
-abstract class FirebaseDocumentNumbersPath {
-  static const String users = 'users';
-  static const String tasks = 'tasks';
+abstract class FirebaseDocumentPaths {
+  static const String activities = 'activities';
 }
 
 enum ConditionTypes {

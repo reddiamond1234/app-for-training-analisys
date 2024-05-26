@@ -29,4 +29,5 @@ abstract class BVImages {
   static String locationIndex(int index) => '${_images}loc$index.png';
   static const String parking = '${_images}parking.png';
   static const String market = '${_images}trznica.png';
+  static const String logo = '${_images}logo.png';
 }

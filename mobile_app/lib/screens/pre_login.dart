@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:training_app/style/images.dart';
 
 import '../bloc/global/global_bloc.dart';
 import '../bloc/pre_login/pre_login_bloc.dart';
@@ -60,6 +61,7 @@ class _PreLoginScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Image.asset(BVImages.logo, width: 150),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

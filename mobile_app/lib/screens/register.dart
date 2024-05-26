@@ -46,7 +46,7 @@ class _RegisterScreen extends StatelessWidget {
                 context,
                 ModalRoute.withName(BVRoutes.preLogin),
               );
-              Navigator.pushReplacementNamed(context, BVRoutes.welcome);
+              Navigator.pushReplacementNamed(context, BVRoutes.home);
             } else {
               if (state.routeToPush != null) {
                 Navigator.pushReplacementNamed(context, state.routeToPush!);

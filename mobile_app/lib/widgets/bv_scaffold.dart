@@ -10,15 +10,22 @@ class BVScaffold extends StatelessWidget {
     required this.body,
     this.showLeading = true,
     this.appBar,
+    this.floatingActionButton,
+    this.persistentFooterButton,
   });
 
   final Color appBarColor;
   final Widget body;
   final bool showLeading;
   final PreferredSizeWidget? appBar;
+  final Widget? floatingActionButton;
+  final Widget? persistentFooterButton;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      persistentFooterButtons:
+          persistentFooterButton == null ? null : [persistentFooterButton!],
+      floatingActionButton: floatingActionButton,
       appBar: appBar ??
           FDAppBar(
             color: appBarColor,

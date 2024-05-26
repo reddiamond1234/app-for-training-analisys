@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:training_app/screens/activity_details.dart';
+import 'package:training_app/screens/add_activity.dart';
 import 'package:training_app/screens/settings.dart';
 
+import '../models/activity.dart';
 import '../screens/forgotten_password.dart';
 import '../screens/home.dart';
 import '../screens/login.dart';
@@ -49,6 +52,17 @@ abstract class BVRouter {
         return MaterialPageRoute<dynamic>(
           settings: const RouteSettings(name: BVRoutes.settings),
           builder: (BuildContext context) => const SettingScreen(),
+        );
+      case BVRoutes.addActivity:
+        return MaterialPageRoute<dynamic>(
+          settings: const RouteSettings(name: BVRoutes.addActivity),
+          builder: (BuildContext context) => const AddActivityScreen(),
+        );
+      case BVRoutes.activityDetails:
+        return MaterialPageRoute<dynamic>(
+          settings: const RouteSettings(name: BVRoutes.activityDetails),
+          builder: (BuildContext context) =>
+              ActivityDetailsScreen(activity: routeArguments as Activity),
         );
     }
 

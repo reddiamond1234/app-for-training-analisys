@@ -7,6 +7,7 @@ import '../bloc/splash/splash_bloc.dart';
 import '../services/firebase_auth_service.dart';
 import '../services/firebase_database_service.dart';
 import '../style/colors.dart';
+import '../style/images.dart';
 import '../widgets/native_dialog.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -49,7 +50,7 @@ class _SplashScreen extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: BVColors.red,
+          backgroundColor: BVColors.background,
           extendBodyBehindAppBar: true,
           body: Stack(
             children: [
@@ -59,9 +60,9 @@ class _SplashScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.width * 0.07,
                   ),
-                  child: Icon(
-                    Icons.directions_bike_rounded,
-                    weight: MediaQuery.of(context).size.height * 0.25,
+                  child: Image.asset(
+                    BVImages.logo,
+                    width: MediaQuery.of(context).size.height * 0.25,
                   ),
                 ),
               ),
