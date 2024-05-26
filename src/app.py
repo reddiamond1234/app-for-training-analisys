@@ -85,6 +85,7 @@ def main():
     cadence = np.array(cadence)
     elevation = np.array(elevation)  # Convert elevation list to numpy array
     heart_rate = np.array(heart_rate)  # Convert heart rate list to numpy array
+    distance = np.array(distance)  # Convert distance list to numpy array
     time = (time - start_timestamp) / 1000.0  # seconds
 
     plot_data(power, time, speed, cadence, elevation, heart_rate)
@@ -127,8 +128,12 @@ def main():
     print(f"Person's ATL: {cyclist.atl:.2f}")
     print(f"Person's Form: {cyclist.form:.2f}")
 
+    # Calculate total distance covered
+    total_distance = calculate_total_distance(distance)
+    print(f"Total Distance Covered: {total_distance:.2f} meters")
+
     # Write data to JSON
-    write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, zone_times, normalized_power, cyclist, elevation_climbed, elevation_descended)
+    write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, zone_times, normalized_power, cyclist, elevation_climbed, elevation_descended, total_distance)
 
 def plot_data(power, time, speed, cadence, elevation, heart_rate):
     """ Plot power, speed, cadence, elevation, and heart rate """
@@ -230,6 +235,18 @@ def calculate_elevation_changes(elevation):
             elevation_descended -= diff  # Make it positive
     return elevation_climbed, elevation_descended
 
+def calculate_total_distance(distance):
+    """
+    Calculate the total distance covered during the workout.
+
+    Parameters:
+        distance (numpy.array): Array of distance data.
+
+    Returns:
+        float: Total distance covered.
+    """
+    return np.max(distance) - np.min(distance)
+
 def print_max_values(power, speed, heart_rate, elevation):
     """
     Print maximum values of power, speed, heart rate, and elevation.
@@ -317,7 +334,7 @@ def calculate_tsb(ctl_today, atl_today):
     """
     return ctl_today - atl_today
 
-def write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, zone_times, normalized_power, cyclist, elevation_climbed, elevation_descended):
+def write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, zone_times, normalized_power, cyclist, elevation_climbed, elevation_descended, total_distance):
     """ Write the training data to a JSON file """
     data = {
         'timestamp': np.array(timestamp).tolist(),  # Convert to NumPy array before calling tolist
@@ -335,7 +352,8 @@ def write_data_to_json(timestamp, power, speed, cadence, elevation, heart_rate, 
             'form': cyclist.form
         },
         'elevation_climbed': elevation_climbed,
-        'elevation_descended': elevation_descended
+        'elevation_descended': elevation_descended,
+        'total_distance': total_distance
     }
     
     with open('training_data.json', 'w') as json_file:
