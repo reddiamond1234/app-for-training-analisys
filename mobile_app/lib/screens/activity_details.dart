@@ -8,7 +8,7 @@ class ActivityDetailsScreen extends StatelessWidget {
     super.key,
     required this.activity,
   });
-  final Activity activity;
+  final BVActivity activity;
 
   @override
   Widget build(BuildContext context) {

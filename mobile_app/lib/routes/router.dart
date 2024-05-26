@@ -62,7 +62,7 @@ abstract class BVRouter {
         return MaterialPageRoute<dynamic>(
           settings: const RouteSettings(name: BVRoutes.activityDetails),
           builder: (BuildContext context) =>
-              ActivityDetailsScreen(activity: routeArguments as Activity),
+              ActivityDetailsScreen(activity: routeArguments as BVActivity),
         );
     }
 

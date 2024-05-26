@@ -138,6 +138,19 @@ class FirebaseDatabaseService {
     }
   }
 
+  Future<Either<Failure, void>> updateDocument(
+    String path,
+    String documentId,
+    Map<String, dynamic> data,
+  ) async {
+    try {
+      await _firestore.collection(path).doc(documentId).update(data);
+      return value(null);
+    } catch (_) {
+      return error(const BackendFailure());
+    }
+  }
+
   void printLongList(List list) {
     for (var i = 0; i < list.length; i++) {
       print('${list[i]}');

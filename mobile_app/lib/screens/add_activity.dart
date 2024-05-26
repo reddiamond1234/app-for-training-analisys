@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_app/models/activity.dart';
 import 'package:training_app/services/firebase_database_service.dart';
@@ -14,6 +15,7 @@ import 'package:training_app/widgets/fd_button.dart';
 import 'package:training_app/widgets/fd_text_field.dart';
 
 import '../bloc/global/global_bloc.dart';
+import '../services/data_processing_service.dart';
 import '../util/failures/failure.dart';
 
 class AddActivityScreen extends StatefulWidget {
@@ -82,7 +84,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
               return;
             }
 
-            final Activity activity = Activity(
+            BVActivity activity = BVActivity(
               id: "",
               name: _activityNameController.text,
               userId: context.read<GlobalBloc>().state.user!.id,
@@ -95,8 +97,6 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
               activity.toJson(),
             );
 
-            if (!context.mounted) return;
-
             if (idOrFailure.isError()) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -105,17 +105,34 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
               return;
             }
 
-            await FirebaseStorage.instance
-                .ref("${FirebaseDocumentPaths.activities}/${idOrFailure.value}")
+            activity = activity.copyWith(id: idOrFailure.value);
+
+            RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+
+            await Isolate.spawn(
+              DataProcessingService.processActivity,
+              ProcessActivityParams(
+                _fitFile!.path,
+                activity,
+                rootIsolateToken,
+              ),
+            );
+
+            if (!context.mounted) return;
+
+            /*await FirebaseStorage.instance
+                .ref("${FirebaseDocumentPaths.activities}/${activity.id}")
                 .child("activity.fit")
                 .putFile(
                   _fitFile!,
                   SettableMetadata(contentType: "application/fit"),
-                );
+                );*/
 
             if (!context.mounted) return;
             Navigator.pop(context);
-          } catch (_) {
+          } catch (e) {
+            print(e);
+
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Napaka pri dodajanju aktivnosti")),
             );

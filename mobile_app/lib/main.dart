@@ -10,6 +10,7 @@ import 'package:training_app/routes/routes.dart';
 import 'bloc/global/global_bloc.dart';
 import 'firebase_options.dart';
 import 'routes/router.dart';
+import 'services/data_processing_service.dart';
 import 'services/firebase_auth_service.dart';
 import 'services/firebase_database_service.dart';
 import 'services/local_storage_service.dart';
@@ -43,6 +44,8 @@ void main() async {
     fallbackLocale: 'sl',
     supportedLocales: ['sl'],
   );
+
+  DataProcessingService();
 
   runApp(LocalizedApp(delegate, BVApp(navigatorKey: navigatorKey)));
 }

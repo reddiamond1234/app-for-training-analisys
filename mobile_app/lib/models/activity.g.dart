@@ -6,7 +6,7 @@ part of 'activity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
+BVActivity _$BVActivityFromJson(Map<String, dynamic> json) => BVActivity(
       id: json['id'],
       name: json['name'] as String?,
       userId: json['userId'] as String,
@@ -14,10 +14,33 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
           const DateTimeConverter().fromJson(json['createdAt'] as String),
       km: json['km'] as String?,
       duration: json['duration'] as String?,
-      elevation: json['elevation'] as String?,
+      elevationString: json['elevationString'] as String?,
+      timestamps: _$JsonConverterFromJson<List<dynamic>, List<DateTime>>(
+          json['timestamps'], const DateTimeListConverter().fromJson),
+      power: (json['power'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      speed: (json['speed'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      cadence: (json['cadence'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      elevation: (json['elevation'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      heartRate: (json['heartRate'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      zoneTimes: (json['zoneTimes'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
+      normalizedPower: (json['normalizedPower'] as num?)?.toDouble(),
+      elevationClimbed: (json['elevationClimbed'] as num?)?.toDouble(),
+      elevationDescended: (json['elevationDescended'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$ActivityToJson(Activity instance) {
+Map<String, dynamic> _$BVActivityToJson(BVActivity instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -31,6 +54,31 @@ Map<String, dynamic> _$ActivityToJson(Activity instance) {
   val['createdAt'] = const DateTimeConverter().toJson(instance.createdAt);
   writeNotNull('km', instance.km);
   writeNotNull('duration', instance.duration);
+  writeNotNull('elevationString', instance.elevationString);
+  writeNotNull(
+      'timestamps',
+      _$JsonConverterToJson<List<dynamic>, List<DateTime>>(
+          instance.timestamps, const DateTimeListConverter().toJson));
+  writeNotNull('power', instance.power);
+  writeNotNull('speed', instance.speed);
+  writeNotNull('cadence', instance.cadence);
   writeNotNull('elevation', instance.elevation);
+  writeNotNull('heartRate', instance.heartRate);
+  writeNotNull('zoneTimes', instance.zoneTimes);
+  writeNotNull('normalizedPower', instance.normalizedPower);
+  writeNotNull('elevationClimbed', instance.elevationClimbed);
+  writeNotNull('elevationDescended', instance.elevationDescended);
   return val;
 }
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

@@ -15,9 +15,14 @@ import '../../widgets/bv_scaffold.dart';
 import '../../widgets/fd_app_bar.dart';
 import '../../widgets/fd_rounded_box.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
 
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     final BVUser? user = context.watch<GlobalBloc>().state.user;
@@ -57,6 +62,16 @@ class HomeTab extends StatelessWidget {
         centerTitle: false,
         actions: [
           IconButton(
+            onPressed: () {
+              setState(() {});
+            },
+            icon: const Icon(
+              Icons.refresh,
+              color: BVColors.dark,
+              size: 30,
+            ),
+          ),
+          IconButton(
             onPressed: () => Navigator.of(context).pushNamed(BVRoutes.settings),
             icon: const Icon(
               Icons.settings,
@@ -69,20 +84,24 @@ class HomeTab extends StatelessWidget {
       ),
       body: Column(
         children: [
-          FirestoreListView<Activity>(
+          FirestoreListView<BVActivity>(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             query: FirebaseFirestore.instance
                 .collection(FirebaseDocumentPaths.activities)
                 .where('userId', isEqualTo: user.id)
+                .orderBy('createdAt', descending: true)
                 .withConverter(
                   fromFirestore: (a, b) =>
-                      Activity.fromJson(a.data()!..['id'] = a.id),
+                      BVActivity.fromJson(a.data()!..['id'] = a.id),
                   toFirestore: (a, b) => a.toJson(),
                 ),
             padding: const EdgeInsets.all(8.0),
             itemBuilder: (context, snapshot) {
-              return ActivityCard(activity: snapshot.data());
+              return ActivityCard(
+                activity: snapshot.data(),
+                key: ValueKey(snapshot.data().id),
+              );
             },
           ),
         ],
@@ -94,10 +113,11 @@ class HomeTab extends StatelessWidget {
 class ActivityCard extends StatelessWidget {
   const ActivityCard({super.key, required this.activity});
 
-  final Activity activity;
+  final BVActivity activity;
   @override
   Widget build(BuildContext context) {
     return Padding(
+      key: key,
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: FDRoundedBox(
         onTap: () => Navigator.of(context)
@@ -117,25 +137,28 @@ class ActivityCard extends StatelessWidget {
               style: BVTextStyles.heading02,
             ),
             const SizedBox(height: 10),
-            DefaultTextStyle(
-              style: BVTextStyles.infoSmall.copyWith(color: BVColors.dark),
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Text(
-                    activity.km ?? "",
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    activity.duration ?? "",
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    activity.elevation ?? "",
-                  ),
-                ],
-              ),
-            )
+            if (activity.km != null ||
+                activity.duration != null ||
+                activity.elevationString != null)
+              DefaultTextStyle(
+                style: BVTextStyles.infoSmall.copyWith(color: BVColors.dark),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${activity.km ?? "0"}km",
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      activity.duration ?? "0min",
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      "${activity.elevationString ?? "0"}m",
+                    ),
+                  ],
+                ),
+              )
           ],
         ),
       ),

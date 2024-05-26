@@ -50,6 +50,8 @@ dependencies:
   intl: ^0.18.0
   firebase_storage: ^11.7.6
   firebase_ui_firestore: ^1.5.15
+  fit_tool: ^1.0.5
+  flutter_isolate: ^2.0.4
 
   flutter_localizations:
     sdk: flutter

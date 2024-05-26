@@ -52,6 +52,26 @@ extension DateExtenstion on DateTime {
   }
 }
 
+extension DurationExtension on Duration {
+  String toSlovenianDuration() {
+    try {
+      final bool isNegative = this.isNegative;
+      final Duration absoluteValue = isNegative ? -this : this;
+
+      final int hours = absoluteValue.inHours;
+      final int minutes = (absoluteValue.inMinutes) % 60;
+      final int seconds = absoluteValue.inSeconds % 60;
+
+      final hourString = hours > 0 ? '${isNegative ? '-' : ''}${hours}h' : '';
+      final minuteString = '${minutes}min';
+
+      return '${isNegative ? "-" : ""}$hourString$minuteString';
+    } catch (_) {
+      return '';
+    }
+  }
+}
+
 class DateTimeConverter implements JsonConverter<DateTime, String> {
   const DateTimeConverter();
 
