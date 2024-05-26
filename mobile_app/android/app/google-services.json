@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "368644420391",
+    "project_id": "training-app-b8140",
+    "storage_bucket": "training-app-b8140.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368644420391:android:d44d7eca8faa64451aef02",
+        "android_client_info": {
+          "package_name": "com.andraz.training_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHuATnpx1ku4Gq0j75FmtYmi0Zgr9iSWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

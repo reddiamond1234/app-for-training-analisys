@@ -1,0 +1,186 @@
+{
+  "general": {
+    "forward": "Naprej"
+  },
+  "forgotten_password": {
+    "title": "Pozabljeno geslo",
+    "email_message": "Vnesite e-poštni naslov",
+    "error_not_found": "Uporabnik s tem e-poštnim naslovom ne obstaja.",
+    "error": "Prišlo je do napake. Prosimo, poskusite znova.",
+    "send": "Pošlji",
+    "success_title": "Uspešno poslano",
+    "success_message": "E-pošta za ponastavitev gesla je bila poslana.",
+    "register": "Registracija",
+    "no_account": "Nimate računa?"
+  },
+  "login": {
+    "title": "Prijava",
+    "email_message": "Vnesite e-poštni naslov",
+    "email": "E-poštni naslov",
+    "password_message": "Vnesite geslo",
+    "password": "Geslo",
+    "primary_button_text": "PRIJAVA",
+    "login_error": "Napačno geslo ali uporabniško ime.",
+    "login_timeout_error": "Prišlo je do napake.",
+    "login_timeout_error_message": "Preverite internetno povezavo.",
+    "login_auth_error": "Napaka avtorizacije.",
+    "forgot_password": "Pozabljeno geslo"
+  },
+  "pre_login": {
+    "title": "Prijava",
+    "email_password": "Prijava z e-pošto",
+    "gmail_login": "Prijava z Google",
+    "apple_login": "Prijava z Apple ID",
+    "facebook_login": "Prijava s Facebook",
+    "registration": "Registracija",
+    "no_account": "Nimate računa?"
+  },
+  "register": {
+    "title": "Registracija",
+    "register_button": "REGISTRACIJA",
+    "confirm_password": "Potrdite geslo",
+    "registration_error": "Napaka pri registraciji",
+    "already_registered": "Že imate račun?",
+    "terms": "Z ustvarjanjem računa se strinjate z našimi pogoji poslovanja in pravilnikom o zasebnosti.",
+    "email_already_registered": "Uporabnik s tem e-poštnim naslovom že obstaja."
+  },
+  "drawer": {
+    "version": "Verzija",
+    "logout": "Odjava",
+    "settings": "Nastavitve"
+  },
+  "bottom_nav_bar": {
+    "home": "Domov",
+    "form": "ZEMLJEVID",
+    "statistics": "Statistika"
+  },
+  "home_tab": {
+    "jaslice": "JASLICE",
+    "program": "PROGRAM",
+    "hunt": "BOŽIČNI LOV"
+  },
+  "program_tab": {},
+  "hunt_tab": {
+    "title": "Skeniraj 6 QR kod in prejmi nagrado!",
+    "message": "Na Božičnem Vojniku je skritih 6 QR kod. Če najdete vse in jih skenirate, prejmete nagrado.",
+    "start_button": "ZAČNI",
+    "continue_button": "NADALJUJ",
+    "collected_codes": "ZBRANIH QR KOD",
+    "all_found_title": "Prišli ste do konca božičnega lova na nagrado. Čestitamo! Vabljeni k Veseljaku, da prevzamete svojo nagrado.",
+    "voucher_title": "Kupon za nagrado",
+    "voucher_message": "Svojo nagrado lahko prevzamete na Veseljaku, Turističnega društva Vojnik.",
+    "use": "UNOVČI"
+  },
+  "maps_tab": {
+    "google_maps": "GOOGLE\nMAPS",
+    "help_panel": {
+      "move_message": "Po zemljevidu se lahko premikate s prstom.",
+      "zoom_message": "Približajte zemljevid za več informacij."
+    }
+  },
+  "market_tab": {
+    "market": "Božična tržnica",
+    "market_message": "16. decembra 2023 — 2. januarja 2024",
+    "market_message2" :  "Med 16:00 − 20:00 uro",
+    "cooking": "Kulinarika",
+    "other": "Ostalo"
+  },
+  "sponsors_tab": {
+    "gold_sponsors": "Zlati donatorji",
+    "silver_sponsors": "Srebrni donatorji",
+    "bronze_sponsors": "Bronasti donatorji"
+  },
+  "seller_details": {
+    "opening_hours": "Odpiralni čas"
+  },
+  "jaslice_page": {
+    "explore_button": "RAZIŠČI"
+  },
+
+  "gender": {
+    "male": "Moški",
+    "female": "Ženski"
+  },
+  "languages": {
+    "sl": "Slovenščina",
+    "de": "Deutsch",
+    "en": "English"
+  },
+  "splash_screen": {
+    "failure": "Napaka"
+  },
+  "treasure_hunt_screen": {
+    "title": "Lov na zaklad",
+    "message_1": "Skeniraj 6 QR kod in prejmi nagrado!",
+    "message_2": "S klikom na ikono skeniraj QR kodo.",
+    "location1": "Ulica 1",
+    "location2": "Most",
+    "location3": "Center",
+    "location4": "Ulica 2",
+    "location5": "Jaslice"
+  },
+  "scan_qr_code": "Skenirajte QR kodo na označenih mestih božičnega Vojnika",
+  "jaslice_screen": {
+    "title": "Dobrodošli na navečji razstavi jaslic na Slovenskem",
+    "message": "Pokažite mi človeka, ki si v življenju ne želi doživeti nečesa lepega!\nNi ga.\nV slehernem človeku je želja, da v različnih lepotah in toplih občutkih nahrani svojo dušo in ob dobri hrani ter prijazni okolici nahrani tudi svoje telo.\nBožični Vojnik ponuja vse to in še več: ponuja pogled na mnoge upodobitve jaslic, ponuja sprehod v tišini, ki jo omogočajo okrašene ulice, ponuja tih klepet ob ogledu najlepšega, kar ponuja božično-novoletni čas in ponuja različne dogodke, ki vsak po svoje bogatijo duše otrok in odraslih.\n V teh letih smo dokazali, da naše neomajno prizadevanje pokazati božično zgodbo na najlepše mogoče načine močno odseva v dušah ljudi. Različni izvajalci iz vse Slovenije in tudi tujine so porok za to. \nIz Vojnika zato ljudje odhajajo polni najlepših vtisov, odhajajo z nevidnim blagoslovom Novorojenega in sporočajo, da bodo še prišli. \nČe si je Božični Vojnik do sedaj ogledalo že več kot 100 000 ljudi, je zagotovo čas, da te radosti užijete tudi VI!",
+    "number_of_jaslice": "Število vseh jaslic: 250",
+    "himna": "Himna Božičnega Vojnika",
+    "inside": "Notranje jaslice",
+    "outside": "Zunanje jaslice"
+  },
+  "jaslice_details_screen": {
+    "play_text": "Predvajaj besedilo",
+    "author": "AVTOR JASLIC",
+    "contact": "KONTAKT",
+    "is_for_sale": "MOŽNOST ODKUPA"
+  },
+  "user": {
+    "name": "Ime in priimek",
+    "email": "E-pošta",
+    "password": "Geslo"
+  },
+  "show_qr_code": "QR kodo pokažite osebju TIC Božičnega Vojnika.",
+  "unlocked_gift": {
+    "congratulations": "Čestitke!",
+    "message": "Prišli ste do konca božičnega lova na nagrado. Čestitamo! Vabljeni k Veseljaku, da prevzemite svojo nagrado. Pa srečno!",
+    "continue": "NADALJUJ"
+  },
+  "welcome": {
+    "first_title": "Dobrodošli v mobilni aplikaciji Božičnega Vojnika",
+    "second_title": "Razstava jaslic, kulinarika, dogodki in še več ...",
+    "first_message": "Zahvaljujemo se vam za namestitev naše aplikacije in vam želimo obilo zabave ter prijetnih trenutkov pri uporabi. Pripravite se na praznično avanturo!",
+    "second_message": "V aplikaciji Božični Vojnik najdete vse, kar potrebujete za popolno doživetje. Bodite pozorni na QR kode, ki so razporejene po božičnem Vojniku.",
+    "third_message": "S pomočjo naše aplikacije lahko odkrijete skrite zaklade Božičnega Vojnika. Skenirajte QR kode in si prislužite nagrado. Vaša božična pustolovščina se začne zdaj!",
+    "last_message": "Naša aplikacija je zasnovana za enostavno in intuitivno uporabo. Preberite, kliknite in se podajte na čarobno božično potovanje!",
+    "second_top_message": "kaj  najdete v božičnem vojniku?",
+    "third_title": "Lov na božični zaklad",
+    "third_top_message": "lov na zaklad",
+    "last_title": "Prijazna in enostavna uporaba",
+    "last_top_message": "uporaba aplikacije",
+    "continue": "NAPREJ",
+    "enter": "VSTOPI V BOŽIČNI VOJNIK",
+    "skip": "Preskoči pregled"
+  },
+  "informations": {
+    "info": "INFO",
+    "points": "INFO TOČKE",
+    "donate": "DONIRAJ",
+    "description": "OPIS",
+    "opening_hours": "Odpiralni čas",
+    "from_to": "Od 16. decembra 2023 — 6. januarja 2024",
+    "every_day_from": "16:00 − 20:00",
+    "market": "Božična tržnica",
+    "market_from_to": "Od 16. decembra 2023 — 2. januarja 2024",
+    "navigation_button": "NAVIGACIJA DO PRIZORIŠČA",
+    "organizer": "Organizator",
+    "general_conditions": "Splošni pogoji",
+    "delete_account": "Izbriši profil",
+    "donation_data": "Podatki za donatorska sredstva"
+
+  },
+  "reason_for_leaving": {
+    "notUsing": "Ne uporabljam aplikacije",
+     "notUsing1": "Ne uporabljam aplikacije 1",
+    "notUsing2": "Ne uporabljam aplikacije 2"
+  }
+}
