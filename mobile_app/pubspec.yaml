@@ -44,7 +44,7 @@ dependencies:
   equatable: ^2.0.5
   localstorage: ^4.0.1+4
   flutter_translate: ^4.0.4
-  fl_chart: ^0.68.0
+  d_chart: ^2.6.9
   file_picker: ^8.0.3
   moment_dart: ^0.17.4
   intl: ^0.18.0
@@ -52,6 +52,7 @@ dependencies:
   firebase_ui_firestore: ^1.5.15
   fit_tool: ^1.0.5
   flutter_isolate: ^2.0.4
+  google_maps_flutter: ^2.6.1
 
   flutter_localizations:
     sdk: flutter

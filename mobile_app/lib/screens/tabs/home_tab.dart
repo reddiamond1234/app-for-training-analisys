@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_app/models/activity.dart';
 import 'package:training_app/services/firebase_database_service.dart';
 import 'package:training_app/style/text_styles.dart';
+import 'package:training_app/util/extensions.dart';
 
 import '../../bloc/global/global_bloc.dart';
 import '../../models/user.dart';
@@ -22,9 +23,10 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final BVUser? user = context.watch<GlobalBloc>().state.user;
     if (user == null) return const SizedBox();
 
@@ -85,6 +87,7 @@ class _HomeTabState extends State<HomeTab> {
       body: Column(
         children: [
           FirestoreListView<BVActivity>(
+            key: ValueKey(user.id),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             query: FirebaseFirestore.instance
@@ -108,6 +111,9 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ActivityCard extends StatelessWidget {
@@ -154,7 +160,7 @@ class ActivityCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      "${activity.elevationString ?? "0"}m",
+                      "${activity.elevationClimbed?.toEUString() ?? "0"}m",
                     ),
                   ],
                 ),

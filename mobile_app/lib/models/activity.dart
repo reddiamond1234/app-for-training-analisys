@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:moment_dart/moment_dart.dart';
+import 'package:training_app/util/extensions.dart';
 
-import '../util/constants.dart';
 import 'item_property.dart';
 
 part 'activity.g.dart';
@@ -28,6 +27,8 @@ class BVActivity extends ItemProperty implements Equatable {
     this.normalizedPower,
     this.elevationClimbed,
     this.elevationDescended,
+    this.positions,
+    this.insight,
   });
 
   final String userId;
@@ -49,6 +50,10 @@ class BVActivity extends ItemProperty implements Equatable {
   final double? normalizedPower;
   final double? elevationClimbed;
   final double? elevationDescended;
+  final ActivityInsight? insight;
+
+  @GeoPointConverter()
+  final List<GeoPoint>? positions;
 
   factory BVActivity.fromJson(Map<String, dynamic> json) =>
       _$BVActivityFromJson(json);
@@ -73,6 +78,8 @@ class BVActivity extends ItemProperty implements Equatable {
     double? normalizedPower,
     double? elevationClimbed,
     double? elevationDescended,
+    List<GeoPoint>? positions,
+    ActivityInsight? insight,
   }) {
     return BVActivity(
       id: id ?? this.id,
@@ -91,6 +98,8 @@ class BVActivity extends ItemProperty implements Equatable {
       normalizedPower: normalizedPower ?? this.normalizedPower,
       elevationClimbed: elevationClimbed ?? this.elevationClimbed,
       elevationDescended: elevationDescended ?? this.elevationDescended,
+      positions: positions ?? this.positions,
+      insight: insight ?? this.insight,
     );
   }
 
@@ -125,21 +134,38 @@ class DateTimeListConverter
       dateTime?.map((e) => e.toStringDate()).toList() ?? [];
 }
 
-extension DateExtenstion on DateTime {
-  String toLocaleDate() {
-    final DateFormat formatter = DateFormat('dd.MM.yyyy, HH:mm', 'sl');
-    try {
-      return formatter.format(this);
-    } catch (_) {
-      return "";
-    }
+class GeoPointConverter
+    implements JsonConverter<List<GeoPoint>, List<dynamic>> {
+  const GeoPointConverter();
+
+  @override
+  List<GeoPoint> fromJson(List<dynamic> geoPoint) {
+    return geoPoint.map((e) {
+      final GeoPoint point = e as GeoPoint;
+      return point;
+    }).toList();
   }
 
-  String toStringDate() {
-    final Moment moment = Moment(
-      toLocal(),
-      localization: MomentLocalizations.byLocale('sl'),
-    );
-    return moment.format(MOMENT_LONG_DATE_FORMAT);
-  }
+  @override
+  List<GeoPoint> toJson(List<GeoPoint> geoPoint) => geoPoint;
+}
+
+@JsonSerializable()
+class ActivityInsight {
+  final num tss;
+  final num form;
+  final num ctl;
+  final num atl;
+
+  ActivityInsight({
+    required this.tss,
+    required this.form,
+    required this.ctl,
+    required this.atl,
+  });
+
+  factory ActivityInsight.fromJson(Map<String, dynamic> json) =>
+      _$ActivityInsightFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ActivityInsightToJson(this);
 }

@@ -160,6 +160,7 @@ class FirebaseDatabaseService {
 
 abstract class FirebaseDocumentPaths {
   static const String activities = 'activities';
+  static const String users = 'users';
 }
 
 enum ConditionTypes {

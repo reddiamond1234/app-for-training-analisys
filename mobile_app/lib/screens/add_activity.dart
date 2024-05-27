@@ -31,114 +31,121 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BVScaffold(
-      appBar: const FDAppBar(
-        title: "Dodaj aktivnost",
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Ime aktivnosti:"),
-          FDTextField(
-            controller: _activityNameController,
-            hintText: "Vnesite ime",
-          ),
-          const SizedBox(height: 10),
-          if (_fitFile == null)
-            const Text("Datoteka .fit ni izbrana")
-          else
-            Text("Izbrana datoteka: ${_fitFile!.path.split("/").last}"),
-          const SizedBox(height: 10),
-          FDPrimaryButton(
-            color: BVColors.bronze,
-            text: "Izberite .fit datoteko",
-            onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                allowMultiple: false,
-                type: FileType.any,
-                withData: true,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      behavior: HitTestBehavior.opaque,
+      child: BVScaffold(
+        appBar: const FDAppBar(
+          title: "Dodaj aktivnost",
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Ime aktivnosti:"),
+            FDTextField(
+              controller: _activityNameController,
+              hintText: "Vnesite ime",
+            ),
+            const SizedBox(height: 10),
+            if (_fitFile == null)
+              const Text("Datoteka .fit ni izbrana")
+            else
+              Text("Izbrana datoteka: ${_fitFile!.path.split("/").last}"),
+            const SizedBox(height: 10),
+            FDPrimaryButton(
+              color: BVColors.bronze,
+              text: "Izberite .fit datoteko",
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  allowMultiple: false,
+                  type: FileType.any,
+                  withData: true,
+                );
+
+                if (result == null) return;
+
+                File file = File(result.files.single.path!);
+                await file.writeAsBytes(result.files.single.bytes!);
+                setState(() {
+                  _fitFile = file;
+                });
+              },
+            ),
+          ],
+        ),
+        persistentFooterButton: FDButton(
+          text: "Dodaj aktivnost",
+          enabled: _fitFile != null,
+          onPressed: () async {
+            try {
+              if (_activityNameController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Ime aktivnosti ne sme biti prazno"),
+                  ),
+                );
+                return;
+              }
+
+              BVActivity activity = BVActivity(
+                id: "",
+                name: _activityNameController.text,
+                userId: context.read<GlobalBloc>().state.user!.id,
+                createdAt: DateTime.now(),
               );
 
-              if (result == null) return;
+              final Either<Failure, String> idOrFailure =
+                  await FirebaseDatabaseService.instance.addDocument(
+                FirebaseDocumentPaths.activities,
+                activity.toJson(),
+              );
 
-              File file = File(result.files.single.path!);
-              await file.writeAsBytes(result.files.single.bytes!);
-              setState(() {
-                _fitFile = file;
-              });
-            },
-          ),
-        ],
-      ),
-      persistentFooterButton: FDButton(
-        text: "Dodaj aktivnost",
-        enabled: _fitFile != null,
-        onPressed: () async {
-          try {
-            if (_activityNameController.text.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Ime aktivnosti ne sme biti prazno"),
+              if (idOrFailure.isError()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("Napaka pri dodajanju aktivnosti")),
+                );
+                return;
+              }
+
+              activity = activity.copyWith(id: idOrFailure.value);
+
+              RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+
+              await Isolate.spawn(
+                DataProcessingService.processActivity,
+                ProcessActivityParams(
+                  _fitFile!.path,
+                  activity,
+                  rootIsolateToken,
                 ),
               );
-              return;
-            }
 
-            BVActivity activity = BVActivity(
-              id: "",
-              name: _activityNameController.text,
-              userId: context.read<GlobalBloc>().state.user!.id,
-              createdAt: DateTime.now(),
-            );
+              if (!context.mounted) return;
 
-            final Either<Failure, String> idOrFailure =
-                await FirebaseDatabaseService.instance.addDocument(
-              FirebaseDocumentPaths.activities,
-              activity.toJson(),
-            );
+              /*await FirebaseStorage.instance
+                  .ref("${FirebaseDocumentPaths.activities}/${activity.id}")
+                  .child("activity.fit")
+                  .putFile(
+                    _fitFile!,
+                    SettableMetadata(contentType: "application/fit"),
+                  );*/
 
-            if (idOrFailure.isError()) {
+              if (!context.mounted) return;
+              Navigator.pop(context);
+            } catch (e) {
+              print(e);
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                     content: Text("Napaka pri dodajanju aktivnosti")),
               );
-              return;
             }
-
-            activity = activity.copyWith(id: idOrFailure.value);
-
-            RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-
-            await Isolate.spawn(
-              DataProcessingService.processActivity,
-              ProcessActivityParams(
-                _fitFile!.path,
-                activity,
-                rootIsolateToken,
-              ),
-            );
-
-            if (!context.mounted) return;
-
-            /*await FirebaseStorage.instance
-                .ref("${FirebaseDocumentPaths.activities}/${activity.id}")
-                .child("activity.fit")
-                .putFile(
-                  _fitFile!,
-                  SettableMetadata(contentType: "application/fit"),
-                );*/
-
-            if (!context.mounted) return;
-            Navigator.pop(context);
-          } catch (e) {
-            print(e);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Napaka pri dodajanju aktivnosti")),
-            );
-          }
-          // Add activity
-        },
+            // Add activity
+          },
+        ),
       ),
     );
   }

@@ -41,6 +41,7 @@ class DataProcessingService {
     List<int> cadence = [];
     List<double> elevation = [];
     List<int> heartRate = [];
+    List<GeoPoint> positions = [];
 
     final File fitFile = File(params.filePath);
 
@@ -58,6 +59,9 @@ class DataProcessingService {
         cadence.add(message.cadence ?? 0);
         elevation.add(message.altitude ?? 0);
         heartRate.add(message.heartRate ?? 0);
+        if (message.positionLat != null && message.positionLong != null) {
+          positions.add(GeoPoint(message.positionLat!, message.positionLong!));
+        }
       }
     }
 
@@ -139,6 +143,7 @@ class DataProcessingService {
       cyclist,
       elevationClimbed,
       elevationDescended,
+      positions,
     );
 
     await FirebaseFirestore.instance
@@ -256,18 +261,20 @@ double calculateTSB(double ctlToday, double atlToday) {
 }
 
 BVActivity writeToActivity(
-    BVActivity activity,
-    List<DateTime> timestamp,
-    List<int> power,
-    List<double> speed,
-    List<int> cadence,
-    List<double> elevation,
-    List<int> heartRate,
-    Map<String, double> zoneTimes,
-    double normalizedPower,
-    Person cyclist,
-    double elevationClimbed,
-    double elevationDescended) {
+  BVActivity activity,
+  List<DateTime> timestamp,
+  List<int> power,
+  List<double> speed,
+  List<int> cadence,
+  List<double> elevation,
+  List<int> heartRate,
+  Map<String, double> zoneTimes,
+  double normalizedPower,
+  Person cyclist,
+  double elevationClimbed,
+  double elevationDescended,
+  List<GeoPoint> positions,
+) {
   return activity.copyWith(
       timestamps: timestamp,
       power: power,
@@ -277,12 +284,13 @@ BVActivity writeToActivity(
       heartRate: heartRate,
       zoneTimes: zoneTimes,
       normalizedPower: normalizedPower,
-      /*cyclistMetrics: {
-      'tss': cyclist.tss,
-      'ctl': cyclist.ctl,
-      'atl': cyclist.atl,
-      'form': cyclist.form
-    },*/
+      insight: ActivityInsight(
+        tss: cyclist.tss,
+        ctl: cyclist.ctl,
+        atl: cyclist.atl,
+        form: cyclist.form,
+      ),
+      positions: positions,
       elevationClimbed: elevationClimbed,
       elevationDescended: elevationDescended);
 }

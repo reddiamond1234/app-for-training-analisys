@@ -50,6 +50,14 @@ extension DateExtenstion on DateTime {
     );
     return moment.format(MOMENT_LONG_DATE_FORMAT);
   }
+
+  String toTime() {
+    final Moment moment = Moment(
+      toLocal(),
+      localization: MomentLocalizations.byLocale('sl'),
+    );
+    return moment.format("HH:mm");
+  }
 }
 
 extension DurationExtension on Duration {

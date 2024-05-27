@@ -38,6 +38,11 @@ BVActivity _$BVActivityFromJson(Map<String, dynamic> json) => BVActivity(
       normalizedPower: (json['normalizedPower'] as num?)?.toDouble(),
       elevationClimbed: (json['elevationClimbed'] as num?)?.toDouble(),
       elevationDescended: (json['elevationDescended'] as num?)?.toDouble(),
+      positions: _$JsonConverterFromJson<List<dynamic>, List<GeoPoint>>(
+          json['positions'], const GeoPointConverter().fromJson),
+      insight: json['insight'] == null
+          ? null
+          : ActivityInsight.fromJson(json['insight'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BVActivityToJson(BVActivity instance) {
@@ -68,6 +73,11 @@ Map<String, dynamic> _$BVActivityToJson(BVActivity instance) {
   writeNotNull('normalizedPower', instance.normalizedPower);
   writeNotNull('elevationClimbed', instance.elevationClimbed);
   writeNotNull('elevationDescended', instance.elevationDescended);
+  writeNotNull('insight', instance.insight?.toJson());
+  writeNotNull(
+      'positions',
+      _$JsonConverterToJson<List<dynamic>, List<GeoPoint>>(
+          instance.positions, const GeoPointConverter().toJson));
   return val;
 }
 
@@ -82,3 +92,19 @@ Json? _$JsonConverterToJson<Json, Value>(
   Json? Function(Value value) toJson,
 ) =>
     value == null ? null : toJson(value);
+
+ActivityInsight _$ActivityInsightFromJson(Map<String, dynamic> json) =>
+    ActivityInsight(
+      tss: json['tss'] as num,
+      form: json['form'] as num,
+      ctl: json['ctl'] as num,
+      atl: json['atl'] as num,
+    );
+
+Map<String, dynamic> _$ActivityInsightToJson(ActivityInsight instance) =>
+    <String, dynamic>{
+      'tss': instance.tss,
+      'form': instance.form,
+      'ctl': instance.ctl,
+      'atl': instance.atl,
+    };
