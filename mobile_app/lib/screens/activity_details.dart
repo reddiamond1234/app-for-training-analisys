@@ -30,10 +30,10 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
   @override
   void initState() {
     _polyLines = {
-      if (widget.activity.positions?.firstOrNull != null)
+      if (widget.activity.advancedStats?.positions?.firstOrNull != null)
         Polyline(
           polylineId: const PolylineId("activity"),
-          points: widget.activity.positions!
+          points: widget.activity.advancedStats!.positions!
               .map((e) => LatLng(e.latitude, e.longitude))
               .toList(),
           color: BVColors.gold,
@@ -45,6 +45,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final BVActivity activity = widget.activity;
+    final AdvancedStats? stats = activity.advancedStats;
     return Scaffold(
       appBar: const FDAppBar(
         title: "Podrobnost aktivnosti",
@@ -61,7 +62,8 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                 suffixText: "Ime aktivnosti",
               ),
               const SizedBox(height: 10),
-              if (widget.activity.positions?.firstOrNull != null) ...[
+              if (widget.activity.advancedStats?.positions?.firstOrNull !=
+                  null) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: SizedBox(
@@ -75,8 +77,8 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                       initialCameraPosition: CameraPosition(
                         zoom: 12,
                         target: LatLng(
-                          activity.positions!.first.latitude,
-                          activity.positions!.first.longitude,
+                          stats!.positions!.first.latitude,
+                          stats.positions!.first.longitude,
                         ),
                       ),
                       gestureRecognizers: <Factory<
@@ -109,7 +111,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                   ),
                   FDTextField(
                     readOnly: true,
-                    content: "${activity.elevationClimbed?.toEUString()}",
+                    content: "${stats?.elevationClimbed?.toEUString()}",
                     suffixText: "Vzpon [m]",
                   ),
                 ],
@@ -121,17 +123,17 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                 children: [
                   FDTextField(
                     readOnly: true,
-                    content: activity.normalizedPower?.toEUString() ?? "/",
+                    content: stats?.normalizedPower?.toEUString() ?? "/",
                     suffixText: "Moč [W]",
                   ),
                   FDTextField(
                     readOnly: true,
-                    content: activity.elevationDescended?.toEUString() ?? "/",
+                    content: stats?.elevationDescended?.toEUString() ?? "/",
                     suffixText: "Spust [m]",
                   ),
                 ],
               ),
-              if (activity.insight != null) ...[
+              if (stats?.insight != null) ...[
                 const SizedBox(height: 30),
                 Text("Forma", style: BVTextStyles.heading02),
                 const SizedBox(height: 5),
@@ -139,22 +141,22 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                   children: [
                     FDTextField(
                       readOnly: true,
-                      content: activity.insight!.tss.toEUString(),
+                      content: stats!.insight!.tss.toEUString(),
                       suffixText: "TSS",
                     ),
                     FDTextField(
                       readOnly: true,
-                      content: activity.insight!.form.toEUString(),
+                      content: stats.insight!.form.toEUString(),
                       suffixText: "Forma",
                     ),
                     FDTextField(
                       readOnly: true,
-                      content: activity.insight!.ctl.toEUString(),
+                      content: stats.insight!.ctl.toEUString(),
                       suffixText: "CTL",
                     ),
                     FDTextField(
                       readOnly: true,
-                      content: activity.insight!.atl.toEUString(),
+                      content: stats.insight!.atl.toEUString(),
                       suffixText: "ATL",
                     ),
                   ],
@@ -163,7 +165,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
               const SizedBox(height: 30),
               Text("Grafi", style: BVTextStyles.heading01),
               const SizedBox(height: 5),
-              if (activity.power != null && activity.power!.isNotEmpty) ...[
+              if (stats?.power != null && stats!.power!.isNotEmpty) ...[
                 Text("Moč", style: BVTextStyles.headingEnter),
                 AspectRatio(
                   aspectRatio: 1.5,
@@ -171,10 +173,10 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                     groupList: [
                       TimeGroup(
                         id: "power",
-                        data: activity.power!
+                        data: stats.power!
                             .mapIndexed(
                               (i, e) => TimeData(
-                                domain: activity.timestamps![i],
+                                domain: stats.timestamps![i],
                                 measure: e,
                               ),
                             )
@@ -185,7 +187,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                 ),
                 const SizedBox(height: 30),
               ],
-              if (activity.elevation?.firstOrNull != null) ...[
+              if (stats?.elevation?.firstOrNull != null) ...[
                 Text("Vzpon", style: BVTextStyles.headingEnter),
                 AspectRatio(
                   aspectRatio: 1.5,
@@ -193,10 +195,10 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                     groupList: [
                       TimeGroup(
                         id: "elevation",
-                        data: activity.elevation!
+                        data: stats!.elevation!
                             .mapIndexed(
                               (i, e) => TimeData(
-                                domain: activity.timestamps![i],
+                                domain: stats.timestamps![i],
                                 measure: e,
                               ),
                             )
@@ -207,7 +209,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                 ),
                 const SizedBox(height: 30),
               ],
-              if (activity.heartRate?.firstOrNull != null) ...[
+              if (stats?.heartRate?.firstOrNull != null) ...[
                 Text("Srčni utrip", style: BVTextStyles.headingEnter),
                 AspectRatio(
                   aspectRatio: 1.5,
@@ -215,10 +217,10 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                     groupList: [
                       TimeGroup(
                         id: "heartRate",
-                        data: activity.heartRate!
+                        data: stats!.heartRate!
                             .mapIndexed(
                               (i, e) => TimeData(
-                                domain: activity.timestamps![i],
+                                domain: stats.timestamps![i],
                                 measure: e,
                               ),
                             )
@@ -229,7 +231,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                 ),
                 const SizedBox(height: 30),
               ],
-              if (activity.speed?.firstOrNull != null) ...[
+              if (stats?.speed?.firstOrNull != null) ...[
                 Text("Hitrost", style: BVTextStyles.headingEnter),
                 AspectRatio(
                   aspectRatio: 1.5,
@@ -237,10 +239,10 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                     groupList: [
                       TimeGroup(
                         id: "speed",
-                        data: activity.speed!
+                        data: stats!.speed!
                             .mapIndexed(
                               (i, e) => TimeData(
-                                domain: activity.timestamps![i],
+                                domain: stats.timestamps![i],
                                 measure: e,
                               ),
                             )
@@ -251,7 +253,7 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                 ),
                 const SizedBox(height: 30),
               ],
-              if (activity.cadence?.firstOrNull != null) ...[
+              if (stats?.cadence?.firstOrNull != null) ...[
                 Text("Kadenca", style: BVTextStyles.headingEnter),
                 AspectRatio(
                   aspectRatio: 1.5,
@@ -259,10 +261,10 @@ class _ActivityDetailsScreenState extends State<ActivityDetailsScreen> {
                     groupList: [
                       TimeGroup(
                         id: "cadence",
-                        data: activity.cadence!
+                        data: stats!.cadence!
                             .mapIndexed(
                               (i, e) => TimeData(
-                                domain: activity.timestamps![i],
+                                domain: stats.timestamps![i],
                                 measure: e,
                               ),
                             )

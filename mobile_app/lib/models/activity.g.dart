@@ -15,34 +15,8 @@ BVActivity _$BVActivityFromJson(Map<String, dynamic> json) => BVActivity(
       km: json['km'] as String?,
       duration: json['duration'] as String?,
       elevationString: json['elevationString'] as String?,
-      timestamps: _$JsonConverterFromJson<List<dynamic>, List<DateTime>>(
-          json['timestamps'], const DateTimeListConverter().fromJson),
-      power: (json['power'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
-      speed: (json['speed'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
-          .toList(),
-      cadence: (json['cadence'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
-      elevation: (json['elevation'] as List<dynamic>?)
-          ?.map((e) => (e as num).toDouble())
-          .toList(),
-      heartRate: (json['heartRate'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
-          .toList(),
-      zoneTimes: (json['zoneTimes'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, (e as num).toDouble()),
-      ),
-      normalizedPower: (json['normalizedPower'] as num?)?.toDouble(),
-      elevationClimbed: (json['elevationClimbed'] as num?)?.toDouble(),
-      elevationDescended: (json['elevationDescended'] as num?)?.toDouble(),
-      positions: _$JsonConverterFromJson<List<dynamic>, List<GeoPoint>>(
-          json['positions'], const GeoPointConverter().fromJson),
-      insight: json['insight'] == null
-          ? null
-          : ActivityInsight.fromJson(json['insight'] as Map<String, dynamic>),
+      advancedStats: _$JsonConverterFromJson<String, AdvancedStats>(
+          json['advancedStats'], const AdvancedStatsConverter().fromJson),
     );
 
 Map<String, dynamic> _$BVActivityToJson(BVActivity instance) {
@@ -61,23 +35,9 @@ Map<String, dynamic> _$BVActivityToJson(BVActivity instance) {
   writeNotNull('duration', instance.duration);
   writeNotNull('elevationString', instance.elevationString);
   writeNotNull(
-      'timestamps',
-      _$JsonConverterToJson<List<dynamic>, List<DateTime>>(
-          instance.timestamps, const DateTimeListConverter().toJson));
-  writeNotNull('power', instance.power);
-  writeNotNull('speed', instance.speed);
-  writeNotNull('cadence', instance.cadence);
-  writeNotNull('elevation', instance.elevation);
-  writeNotNull('heartRate', instance.heartRate);
-  writeNotNull('zoneTimes', instance.zoneTimes);
-  writeNotNull('normalizedPower', instance.normalizedPower);
-  writeNotNull('elevationClimbed', instance.elevationClimbed);
-  writeNotNull('elevationDescended', instance.elevationDescended);
-  writeNotNull('insight', instance.insight?.toJson());
-  writeNotNull(
-      'positions',
-      _$JsonConverterToJson<List<dynamic>, List<GeoPoint>>(
-          instance.positions, const GeoPointConverter().toJson));
+      'advancedStats',
+      _$JsonConverterToJson<String, AdvancedStats>(
+          instance.advancedStats, const AdvancedStatsConverter().toJson));
   return val;
 }
 
@@ -107,4 +67,64 @@ Map<String, dynamic> _$ActivityInsightToJson(ActivityInsight instance) =>
       'form': instance.form,
       'ctl': instance.ctl,
       'atl': instance.atl,
+    };
+
+AdvancedStats _$AdvancedStatsFromJson(Map<String, dynamic> json) =>
+    AdvancedStats(
+      timestamps: _$JsonConverterFromJson<List<dynamic>, List<DateTime>>(
+          json['timestamps'], const DateTimeListConverter().fromJson),
+      power: (json['power'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      speed: (json['speed'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      cadence: (json['cadence'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      elevation: (json['elevation'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
+      heartRate: (json['heartRate'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      zoneTimes: (json['zoneTimes'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
+      normalizedPower: (json['normalizedPower'] as num?)?.toDouble(),
+      elevationClimbed: (json['elevationClimbed'] as num?)?.toDouble(),
+      elevationDescended: (json['elevationDescended'] as num?)?.toDouble(),
+      positions: (json['positions'] as List<dynamic>?)
+          ?.map((e) => GeoPoint2.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      insight: json['insight'] == null
+          ? null
+          : ActivityInsight.fromJson(json['insight'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$AdvancedStatsToJson(AdvancedStats instance) =>
+    <String, dynamic>{
+      'timestamps': _$JsonConverterToJson<List<dynamic>, List<DateTime>>(
+          instance.timestamps, const DateTimeListConverter().toJson),
+      'power': instance.power,
+      'speed': instance.speed,
+      'cadence': instance.cadence,
+      'elevation': instance.elevation,
+      'heartRate': instance.heartRate,
+      'zoneTimes': instance.zoneTimes,
+      'normalizedPower': instance.normalizedPower,
+      'elevationClimbed': instance.elevationClimbed,
+      'elevationDescended': instance.elevationDescended,
+      'insight': instance.insight,
+      'positions': instance.positions,
+    };
+
+GeoPoint2 _$GeoPoint2FromJson(Map<String, dynamic> json) => GeoPoint2(
+      (json['latitude'] as num).toDouble(),
+      (json['longitude'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$GeoPoint2ToJson(GeoPoint2 instance) => <String, dynamic>{
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };

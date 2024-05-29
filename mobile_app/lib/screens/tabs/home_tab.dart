@@ -160,7 +160,7 @@ class ActivityCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      "${activity.elevationClimbed?.toEUString() ?? "0"}m",
+                      "${activity.advancedStats?.elevationClimbed?.toEUString() ?? "0"}m",
                     ),
                   ],
                 ),

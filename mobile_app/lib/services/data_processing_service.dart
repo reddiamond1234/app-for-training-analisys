@@ -41,7 +41,7 @@ class DataProcessingService {
     List<int> cadence = [];
     List<double> elevation = [];
     List<int> heartRate = [];
-    List<GeoPoint> positions = [];
+    List<GeoPoint2> positions = [];
 
     final File fitFile = File(params.filePath);
 
@@ -60,7 +60,7 @@ class DataProcessingService {
         elevation.add(message.altitude ?? 0);
         heartRate.add(message.heartRate ?? 0);
         if (message.positionLat != null && message.positionLong != null) {
-          positions.add(GeoPoint(message.positionLat!, message.positionLong!));
+          positions.add(GeoPoint2(message.positionLat!, message.positionLong!));
         }
       }
     }
@@ -273,9 +273,9 @@ BVActivity writeToActivity(
   Person cyclist,
   double elevationClimbed,
   double elevationDescended,
-  List<GeoPoint> positions,
+  List<GeoPoint2> positions,
 ) {
-  return activity.copyWith(
+  final AdvancedStats advancedStats = AdvancedStats(
       timestamps: timestamp,
       power: power,
       speed: speed,
@@ -293,6 +293,7 @@ BVActivity writeToActivity(
       positions: positions,
       elevationClimbed: elevationClimbed,
       elevationDescended: elevationDescended);
+  return activity.copyWith(advancedStats: advancedStats);
 }
 
 class TrainingZones {

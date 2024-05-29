@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -17,18 +19,7 @@ class BVActivity extends ItemProperty implements Equatable {
     this.km,
     this.duration,
     this.elevationString,
-    this.timestamps,
-    this.power,
-    this.speed,
-    this.cadence,
-    this.elevation,
-    this.heartRate,
-    this.zoneTimes,
-    this.normalizedPower,
-    this.elevationClimbed,
-    this.elevationDescended,
-    this.positions,
-    this.insight,
+    this.advancedStats,
   });
 
   final String userId;
@@ -37,23 +28,9 @@ class BVActivity extends ItemProperty implements Equatable {
   final String? km;
   final String? duration;
   final String? elevationString;
-
   // training data
-  @DateTimeListConverter()
-  final List<DateTime>? timestamps;
-  final List<int>? power;
-  final List<double>? speed;
-  final List<int>? cadence;
-  final List<double>? elevation;
-  final List<int>? heartRate;
-  final Map<String, double>? zoneTimes;
-  final double? normalizedPower;
-  final double? elevationClimbed;
-  final double? elevationDescended;
-  final ActivityInsight? insight;
-
-  @GeoPointConverter()
-  final List<GeoPoint>? positions;
+  @AdvancedStatsConverter()
+  final AdvancedStats? advancedStats;
 
   factory BVActivity.fromJson(Map<String, dynamic> json) =>
       _$BVActivityFromJson(json);
@@ -68,18 +45,7 @@ class BVActivity extends ItemProperty implements Equatable {
     String? km,
     String? duration,
     String? elevationString,
-    List<DateTime>? timestamps,
-    List<int>? power,
-    List<double>? speed,
-    List<int>? cadence,
-    List<double>? elevation,
-    List<int>? heartRate,
-    Map<String, double>? zoneTimes,
-    double? normalizedPower,
-    double? elevationClimbed,
-    double? elevationDescended,
-    List<GeoPoint>? positions,
-    ActivityInsight? insight,
+    AdvancedStats? advancedStats,
   }) {
     return BVActivity(
       id: id ?? this.id,
@@ -88,18 +54,7 @@ class BVActivity extends ItemProperty implements Equatable {
       km: km ?? this.km,
       duration: duration ?? this.duration,
       elevationString: elevationString ?? this.elevationString,
-      timestamps: timestamps ?? this.timestamps,
-      power: power ?? this.power,
-      speed: speed ?? this.speed,
-      cadence: cadence ?? this.cadence,
-      elevation: elevation ?? this.elevation,
-      heartRate: heartRate ?? this.heartRate,
-      zoneTimes: zoneTimes ?? this.zoneTimes,
-      normalizedPower: normalizedPower ?? this.normalizedPower,
-      elevationClimbed: elevationClimbed ?? this.elevationClimbed,
-      elevationDescended: elevationDescended ?? this.elevationDescended,
-      positions: positions ?? this.positions,
-      insight: insight ?? this.insight,
+      advancedStats: advancedStats ?? this.advancedStats,
     );
   }
 
@@ -118,6 +73,20 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
 
   @override
   String toJson(DateTime? dateTime) => dateTime?.toStringDate() ?? "";
+}
+
+class AdvancedStatsConverter implements JsonConverter<AdvancedStats, String> {
+  const AdvancedStatsConverter();
+
+  @override
+  AdvancedStats fromJson(String dateTimeString) {
+    return AdvancedStats.fromJson(jsonDecode(dateTimeString));
+  }
+
+  @override
+  String toJson(AdvancedStats? dateTime) {
+    return jsonEncode(dateTime?.toJson() ?? {});
+  }
 }
 
 class DateTimeListConverter
@@ -168,4 +137,57 @@ class ActivityInsight {
       _$ActivityInsightFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActivityInsightToJson(this);
+}
+
+@JsonSerializable()
+class AdvancedStats {
+  @DateTimeListConverter()
+  final List<DateTime>? timestamps;
+  final List<int>? power;
+  final List<double>? speed;
+  final List<int>? cadence;
+  final List<double>? elevation;
+  final List<int>? heartRate;
+  final Map<String, double>? zoneTimes;
+  final double? normalizedPower;
+  final double? elevationClimbed;
+  final double? elevationDescended;
+  final ActivityInsight? insight;
+  final List<GeoPoint2>? positions;
+
+  AdvancedStats({
+    this.timestamps,
+    this.power,
+    this.speed,
+    this.cadence,
+    this.elevation,
+    this.heartRate,
+    this.zoneTimes,
+    this.normalizedPower,
+    this.elevationClimbed,
+    this.elevationDescended,
+    this.positions,
+    this.insight,
+  });
+
+  factory AdvancedStats.fromJson(Map<String, dynamic> json) =>
+      _$AdvancedStatsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AdvancedStatsToJson(this);
+}
+
+@JsonSerializable()
+class GeoPoint2 {
+  final double latitude;
+  final double longitude;
+
+  GeoPoint2(
+    this.latitude,
+    this.longitude,
+  );
+
+  factory GeoPoint2.fromJson(Map<String, dynamic> json) =>
+      _$GeoPoint2FromJson(json);
+
+  Map<String, dynamic> toJson() => _$GeoPoint2ToJson(this);
 }
